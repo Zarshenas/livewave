@@ -1,5 +1,5 @@
 import { Box, TextField, Button, Typography, Container } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Logo from "../assets/livewavelogo.svg";
 import { useState } from "react";
 import { useSignup } from "../hooks/useSignup";
@@ -7,13 +7,17 @@ import { useSignup } from "../hooks/useSignup";
 const Signup = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  
+  const navigate = useNavigate();
 
   const { mutate, isError, isPending, error } = useSignup();
 
   const handleSignUp = (e) => {
     e.preventDefault();
-    mutate({ email, password });
-  };
+    mutate({ email, password },{onSuccess:()=>{
+        navigate('/login');
+    }});
+    };
 
   return (
     <Container

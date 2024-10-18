@@ -9,7 +9,16 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      // These options will apply to all queries in the app
+      staleTime: 1000 * 60 * 5, // 5 minutes stale time
+      cacheTime: 1000 * 60 * 10, // 10 minutes cache time
+      refetchOnWindowFocus: false, // Disable refetching when the window regains focus
+    },
+  },
+});
 // Define the custom theme using your palette
 const theme = createTheme({
   palette: {
