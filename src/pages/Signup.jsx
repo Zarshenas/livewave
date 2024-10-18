@@ -1,16 +1,20 @@
-import React from "react";
-import {
-  Box,
-  TextField,
-  Button,
-  Typography,
-  Container,
-} from "@mui/material";
+import { Box, TextField, Button, Typography, Container } from "@mui/material";
 import { Link } from "react-router-dom";
 import Logo from "../assets/livewavelogo.svg";
-
+import { useState } from "react";
+import { useSignup } from "../hooks/useSignup";
 
 const Signup = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { mutate, isError, isPending, error } = useSignup();
+
+  const handleSignUp = (e) => {
+    e.preventDefault();
+    mutate({ email, password });
+  };
+
   return (
     <Container
       sx={{
@@ -51,16 +55,7 @@ const Signup = () => {
           <Typography variant="h5" sx={{ marginBottom: "1.5rem" }}>
             Sign Up
           </Typography>
-          <form>
-            <TextField
-              variant="outlined"
-              fullWidth
-              label="Username"
-              type="text"
-              sx={{
-                marginBottom: "1rem",
-              }}
-            />
+          <form onSubmit={handleSignUp}>
             <TextField
               variant="outlined"
               fullWidth
@@ -69,6 +64,9 @@ const Signup = () => {
               sx={{
                 marginBottom: "1rem",
               }}
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <TextField
               variant="outlined"
@@ -78,17 +76,27 @@ const Signup = () => {
               sx={{
                 marginBottom: "1rem",
               }}
+              required
+              value={password}              
+              onChange={(e) => setPassword(e.target.value)}
             />
             <Button
+              type="submit"
               variant="contained"
               fullWidth
               sx={{
                 marginTop: "1rem",
               }}
+              disabled={isPending}
             >
-              Sign Up
+              {isPending ? "Signing Up..." : "Sign Up"}
             </Button>
           </form>
+          {isError && (
+            <Typography variant="span" sx={{ color: "#ff0000" }}>
+              {error.message}
+            </Typography>
+          )}
           <Typography sx={{ marginTop: "1rem" }}>
             Already have an account?{" "}
             <Link to={"/login"}>

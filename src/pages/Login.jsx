@@ -1,8 +1,19 @@
-import React from "react";
 import { Box, TextField, Button, Typography, Container } from "@mui/material";
 import Logo from "../assets/livewavelogo.svg";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import useLogin from "../hooks/useLogin";
 const Login = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { mutate, isError, isPending, error } = useLogin();
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    mutate({ email, password });
+  };
+
   return (
     <Container
       sx={{
@@ -44,7 +55,7 @@ const Login = () => {
           <Typography variant="h5" sx={{ marginBottom: "1.5rem" }}>
             Login
           </Typography>
-          <form>
+          <form onSubmit={handleLogin}>
             <TextField
               variant="outlined"
               fullWidth
@@ -53,6 +64,8 @@ const Login = () => {
               sx={{
                 marginBottom: "1rem",
               }}
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
             <TextField
               variant="outlined"
@@ -62,6 +75,8 @@ const Login = () => {
               sx={{
                 marginBottom: "1rem",
               }}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <Button
               variant="contained"
@@ -69,10 +84,17 @@ const Login = () => {
               sx={{
                 backgroundColor: "#007BFF", // Primary blue color
               }}
+              type="submit"
+              disabled={isPending}
             >
-              Login
+              {isPending ? "Logging In..." : "Login"}
             </Button>
           </form>
+          {isError && (
+            <Typography variant="span" sx={{ color: "#ff0000" }}>
+              {error.message}
+            </Typography>
+          )}
           <Typography sx={{ marginTop: "1rem" }}>
             Don’t have an account?{" "}
             <Link to={"/signup"}>
