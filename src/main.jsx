@@ -1,13 +1,15 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import {
+  createBrowserRouter,
+  Navigate,
+  RouterProvider,
+} from "react-router-dom";
 import Home from "./pages/Home.jsx";
 import Signup from "./pages/Signup.jsx";
 import Login from "./pages/Login.jsx";
 import { createTheme, CssBaseline, ThemeProvider } from "@mui/material";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-
-
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -78,7 +80,11 @@ const theme = createTheme({
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Home />,
+    element: <Home />
+  },
+  {
+    path: "/home",
+    element: <Navigate to={"/"} replace />,
   },
   {
     path: "/signup",
